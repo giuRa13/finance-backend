@@ -52,8 +52,48 @@ namespace finance_backend.Controllers
             return CreatedAtAction(
                 nameof(GetById), 
                 new{Id = stockModel.Id}, 
-                stockModel.ToStockDTO()
+                stockModel.ToStockDTO() //(201)
             );
+        }
+
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDTO updatedDTO)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+
+            if (stockModel == null)
+                return NotFound();
+
+            stockModel.Symbol = updatedDTO.Symbol;
+            stockModel.CompanyName = updatedDTO.CompanyName;
+            stockModel.Purchase = updatedDTO.Purchase;
+            stockModel.LastDiv = updatedDTO.LastDiv;
+            stockModel.Industry = updatedDTO.Industry;
+            stockModel.Marketcap = updatedDTO.Marketcap;
+
+            _context.SaveChanges();
+
+            return Ok(stockModel.ToStockDTO());
+        }
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+
+            if (stockModel == null)
+                return NotFound();
+
+            _context.Stocks.Remove(stockModel);
+            _context.SaveChanges();
+
+            return Ok(stockModel); 
+            // return NoContent
+            // (with a Delete NOContentent is a success (204))
         }
     }
 }

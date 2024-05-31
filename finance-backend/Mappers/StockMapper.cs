@@ -36,5 +36,6 @@ namespace finance_backend.Mappers
                 Marketcap = stockDTO.Marketcap,
             };
         }
+
     }
 }
