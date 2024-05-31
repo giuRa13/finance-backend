@@ -7,6 +7,7 @@ using finance_backend.DTOs.StockDTO;
 using finance_backend.Mappers;
 using finance_backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace finance_backend.Controllers
 {
@@ -22,19 +23,19 @@ namespace finance_backend.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var stocks = _context.Stocks.ToList()
-                .Select(s => s.ToStockDTO());
+            var stocks = await _context.Stocks.ToListAsync();
+            var stocksDTO = stocks.Select(s => s.ToStockDTO());
 
-            return Ok(stocks);
+            return Ok(stocksDTO);
         }
 
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute]int id)
+        public async Task<IActionResult> GetById([FromRoute]int id)
         {
-            var stock = _context.Stocks.Find(id);
+            var stock = await _context.Stocks.FindAsync(id);
 
             if (stock == null)
                 return NotFound();
@@ -44,11 +45,11 @@ namespace finance_backend.Controllers
 
 
         [HttpPost]
-        public IActionResult Create([FromBody]CreateStockRequestDTO stockDTO)
+        public async Task<IActionResult> Create([FromBody]CreateStockRequestDTO stockDTO)
         {
             var stockModel = stockDTO.ToStockFromCreateDTO();
-            _context.Stocks.Add(stockModel);
-            _context.SaveChanges();
+            await _context.Stocks.AddAsync(stockModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(
                 nameof(GetById), 
                 new{Id = stockModel.Id}, 
@@ -59,9 +60,9 @@ namespace finance_backend.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDTO updatedDTO)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDTO updatedDTO)
         {
-            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
             if (stockModel == null)
                 return NotFound();
@@ -73,7 +74,7 @@ namespace finance_backend.Controllers
             stockModel.Industry = updatedDTO.Industry;
             stockModel.Marketcap = updatedDTO.Marketcap;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(stockModel.ToStockDTO());
         }
@@ -81,15 +82,15 @@ namespace finance_backend.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var stockModel = _context.Stocks.FirstOrDefault(x => x.Id == id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
             if (stockModel == null)
                 return NotFound();
 
             _context.Stocks.Remove(stockModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(stockModel); 
             // return NoContent
