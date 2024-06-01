@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
 using finance_backend.DTOs.StockDTO;
+using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,18 @@ namespace finance_backend.Controllers
     public class StockController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public StockController(ApplicationDbContext context)
+        private readonly IStockRepository _stockRepository;
+        public StockController(ApplicationDbContext context, IStockRepository stockRepository)
         {
             _context = context;
+            _stockRepository = stockRepository;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var stocks = await _context.Stocks.ToListAsync();
+            var stocks = await _stockRepository.GetAllAsync(); 
             var stocksDTO = stocks.Select(s => s.ToStockDTO());
 
             return Ok(stocksDTO);
@@ -35,7 +38,7 @@ namespace finance_backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
-            var stock = await _context.Stocks.FindAsync(id);
+            var stock = await _stockRepository.GetByIdAsync(id);
 
             if (stock == null)
                 return NotFound();
@@ -48,8 +51,8 @@ namespace finance_backend.Controllers
         public async Task<IActionResult> Create([FromBody]CreateStockRequestDTO stockDTO)
         {
             var stockModel = stockDTO.ToStockFromCreateDTO();
-            await _context.Stocks.AddAsync(stockModel);
-            await _context.SaveChangesAsync();
+            await _stockRepository.CreateAsync(stockModel);
+
             return CreatedAtAction(
                 nameof(GetById), 
                 new{Id = stockModel.Id}, 
@@ -62,19 +65,10 @@ namespace finance_backend.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDTO updatedDTO)
         {
-            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+            var stockModel = await _stockRepository.UpdateAsync(id, updatedDTO);
 
             if (stockModel == null)
                 return NotFound();
-
-            stockModel.Symbol = updatedDTO.Symbol;
-            stockModel.CompanyName = updatedDTO.CompanyName;
-            stockModel.Purchase = updatedDTO.Purchase;
-            stockModel.LastDiv = updatedDTO.LastDiv;
-            stockModel.Industry = updatedDTO.Industry;
-            stockModel.Marketcap = updatedDTO.Marketcap;
-
-            await _context.SaveChangesAsync();
 
             return Ok(stockModel.ToStockDTO());
         }
@@ -84,13 +78,10 @@ namespace finance_backend.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+            var stockModel = await _stockRepository.DeleteAsync(id);
 
             if (stockModel == null)
                 return NotFound();
-
-            _context.Stocks.Remove(stockModel);
-            await _context.SaveChangesAsync();
 
             return Ok(stockModel); 
             // return NoContent
