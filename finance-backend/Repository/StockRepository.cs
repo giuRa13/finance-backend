@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
 using finance_backend.DTOs.Stock;
+using finance_backend.Helpers;
 using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Models;
@@ -20,9 +21,22 @@ namespace finance_backend.Repository
         }
 
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+            //return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+            var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            return await stocks.ToListAsync();
         }   
 
 

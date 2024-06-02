@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
 using finance_backend.DTOs.Stock;
+using finance_backend.Helpers;
 using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Models;
@@ -26,12 +27,12 @@ namespace finance_backend.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]QueryObject query)
         {
             if (!ModelState.IsValid) // for validation (annotation)
                 return BadRequest(ModelState);
 
-            var stocks = await _stockRepository.GetAllAsync(); 
+            var stocks = await _stockRepository.GetAllAsync(query); 
             var stocksDTO = stocks.Select(s => s.ToStockDTO());
 
             return Ok(stocksDTO);
