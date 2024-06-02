@@ -68,7 +68,7 @@ namespace finance_backend.Controllers
 
             return CreatedAtAction(
                 nameof(GetById),
-                new { id = commentModel},
+                new { id = commentModel.Id},
                 commentModel.ToCommentDTO() );
         }
 
@@ -86,6 +86,19 @@ namespace finance_backend.Controllers
                 return NotFound("Comment does not exists!");
 
             return Ok(commentModel);
+        }
+
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]UpdateCommentRequestDTO commentDTO)
+        {
+            var comment = await _commentRepository.UpdateAsync(id, commentDTO.ToCommentFromUpdate());
+
+            if (comment == null)
+                return NotFound("Comment not found!");
+
+            return Ok(comment.ToCommentDTO());
         }
     }
 }
