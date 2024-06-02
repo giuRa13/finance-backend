@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using finance_backend.DTOs.StockDTO;
+using finance_backend.DTOs.Stock;
 using finance_backend.Models;
+using finance_backend.Mappers;
 
 namespace finance_backend.Mappers
 {
@@ -20,6 +21,7 @@ namespace finance_backend.Mappers
                 LastDiv = stockModel.LastDiv,
                 Industry = stockModel.Industry,
                 Marketcap = stockModel.Marketcap,
+                Comments = stockModel.Comments.Select(c => c.ToCommentDTO()).ToList()                                                                                                          
             };
         }
 

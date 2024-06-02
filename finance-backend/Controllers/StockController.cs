@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
-using finance_backend.DTOs.StockDTO;
+using finance_backend.DTOs.Stock;
 using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Models;

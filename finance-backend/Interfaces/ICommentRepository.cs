@@ -8,6 +8,8 @@ namespace finance_backend.Repository
 {
     public interface ICommentRepository
     {
-        Task <List<Comment>> GetAllAsync();
+        Task<List<Comment>> GetAllAsync();
+
+        Task<Comment?> GetByIdAsync(int id);
     }
 }

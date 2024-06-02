@@ -19,6 +19,7 @@ namespace finance_backend.Controllers
         }
 
 
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -26,6 +27,18 @@ namespace finance_backend.Controllers
             var commentDTO = comments.Select(s => s.ToCommentDTO());
 
             return Ok(commentDTO);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute]int id)
+        {
+            var comment = await _commentRepository.GetByIdAsync(id);
+
+            if (comment == null)
+                return NotFound();
+
+            return Ok(comment.ToCommentDTO());
         }
     }
 }

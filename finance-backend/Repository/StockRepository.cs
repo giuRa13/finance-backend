@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
-using finance_backend.DTOs.StockDTO;
+using finance_backend.DTOs.Stock;
 using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Models;
@@ -22,13 +22,13 @@ namespace finance_backend.Repository
 
         public async Task<List<Stock>> GetAllAsync()
         {
-            return await _context.Stocks.ToListAsync();
+            return await _context.Stocks.Include(c => c.Comments).ToListAsync();
         }   
 
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            return await _context.Stocks.FindAsync(id);
+            return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
         }
         
 

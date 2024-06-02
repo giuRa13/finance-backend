@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace finance_backend.DTOs.StockDTO
+namespace finance_backend.DTOs.Stock
 {
     public class UpdateStockRequestDTO
     {
