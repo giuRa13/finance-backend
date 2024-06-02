@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using finance_backend.DTOs.Comment;
+using finance_backend.Interfaces;
 using finance_backend.Mappers;
 using finance_backend.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +15,11 @@ namespace finance_backend.Controllers
     public class CommentController :ControllerBase
     {
         private readonly ICommentRepository _commentRepository;
-        public CommentController(ICommentRepository commentRepository)
+        private readonly IStockRepository _stockRepository;
+        public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository)
         {
             _commentRepository = commentRepository;
+            _stockRepository = stockRepository;
         }
 
 
@@ -39,6 +43,24 @@ namespace finance_backend.Controllers
                 return NotFound();
 
             return Ok(comment.ToCommentDTO());
+        }
+
+
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> Create([FromRoute]int stockId, CreateCommentRequestDTO commentDTO)
+        {
+            if (!await _stockRepository.StockExists(stockId))
+            {
+                return BadRequest("Stock does not exists!");
+            }
+
+            var commentModel = commentDTO.ToCommentFromCreate(stockId);
+            await _commentRepository.CreateAsync(commentModel);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = commentModel},
+                commentModel.ToCommentDTO() );
         }
     }
 }

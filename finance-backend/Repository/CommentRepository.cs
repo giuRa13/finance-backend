@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
 using finance_backend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace finance_backend.Repository
@@ -25,6 +26,15 @@ namespace finance_backend.Repository
         public async Task<Comment?> GetByIdAsync(int id)
         {
             return await _context.Comments.FindAsync(id);
+        }
+
+
+        public async Task<Comment> CreateAsync(Comment commentModel)
+        {
+            await _context.Comments.AddAsync(commentModel);
+            await _context.SaveChangesAsync();
+
+            return commentModel;
         }
     }
 }

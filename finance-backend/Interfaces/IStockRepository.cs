@@ -18,5 +18,7 @@ namespace finance_backend.Interfaces
         Task <Stock?> UpdateAsync(int id, UpdateStockRequestDTO stockDTO);
 
         Task <Stock> DeleteAsync(int id);
+
+        Task <bool> StockExists(int id); // for Create Comment
     }
 }
