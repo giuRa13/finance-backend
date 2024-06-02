@@ -62,5 +62,18 @@ namespace finance_backend.Controllers
                 new { id = commentModel},
                 commentModel.ToCommentDTO() );
         }
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var commentModel = await _commentRepository.DeleteAsync(id);
+
+            if (commentModel == null)
+                return NotFound("Comment does not exists!");
+
+            return Ok(commentModel);
+        }
     }
 }
