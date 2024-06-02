@@ -27,6 +27,9 @@ namespace finance_backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid) // for validation (annotation)
+                return BadRequest(ModelState);
+
             var comments = await _commentRepository.GetAllAsync();
             var commentDTO = comments.Select(s => s.ToCommentDTO());
 
@@ -34,9 +37,12 @@ namespace finance_backend.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
+            if (!ModelState.IsValid) 
+                return BadRequest(ModelState);
+
             var comment = await _commentRepository.GetByIdAsync(id);
 
             if (comment == null)
@@ -46,9 +52,12 @@ namespace finance_backend.Controllers
         }
 
 
-        [HttpPost("{stockId}")]
+        [HttpPost("{stockId:int}")]
         public async Task<IActionResult> Create([FromRoute]int stockId, CreateCommentRequestDTO commentDTO)
         {
+            if (!ModelState.IsValid) // for validation (annotation)
+                return BadRequest(ModelState);
+
             if (!await _stockRepository.StockExists(stockId))
             {
                 return BadRequest("Stock does not exists!");
@@ -65,9 +74,12 @@ namespace finance_backend.Controllers
 
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if (!ModelState.IsValid) // for validation (annotation)
+                return BadRequest(ModelState);
+
             var commentModel = await _commentRepository.DeleteAsync(id);
 
             if (commentModel == null)
