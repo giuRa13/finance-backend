@@ -7,6 +7,7 @@ using finance_backend.Interfaces;
 using finance_backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace finance_backend.Controllers
 {
@@ -16,10 +17,15 @@ namespace finance_backend.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+        private readonly SignInManager<AppUser> _signInManager;
+        public AccountController(
+            UserManager<AppUser> userManager, 
+            ITokenService tokenService,
+            SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signInManager = signInManager;
         }
 
 
@@ -67,6 +73,35 @@ namespace finance_backend.Controllers
                 
                 return StatusCode(500, e);
             }
+        }
+
+
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDTO.UserName.ToLower());
+
+            if (user == null)
+                return Unauthorized("Invalid UserName!");
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false); // bool lockoutOnFailure
+        
+            if (!result.Succeeded)
+                return Unauthorized("UserName or Password are not valid!");
+
+
+            return Ok(
+                new NewUserDTO
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                }
+            );
         }
     }
 }

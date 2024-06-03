@@ -27,6 +27,7 @@ namespace finance_backend.Controllers
 
 
         [HttpGet]
+        //[Authorize]
         public async Task<IActionResult> GetAll([FromQuery]QueryObject query)
         {
             if (!ModelState.IsValid) // for validation (annotation)
