@@ -226,8 +226,8 @@ namespace finance_backend.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "484d58ec-9a88-4867-82a3-e59c37d1fe66", null, "Admin", "ADMIN" },
-                    { "a1ab6e35-a820-4128-9983-872a616203e1", null, "User", "USER" }
+                    { "741012a3-5a27-4c2e-9b23-21e81e6b8986", null, "Admin", "ADMIN" },
+                    { "a2a95b7e-baf0-4bd9-9165-945f12d4b40f", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

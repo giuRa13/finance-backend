@@ -12,7 +12,7 @@ using finance_backend.Data;
 namespace finance_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240603232151_PortfolioManyToMany")]
+    [Migration("20240618230901_PortfolioManyToMany")]
     partial class PortfolioManyToMany
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace finance_backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -54,13 +54,13 @@ namespace finance_backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "484d58ec-9a88-4867-82a3-e59c37d1fe66",
+                            Id = "741012a3-5a27-4c2e-9b23-21e81e6b8986",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a1ab6e35-a820-4128-9983-872a616203e1",
+                            Id = "a2a95b7e-baf0-4bd9-9165-945f12d4b40f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
