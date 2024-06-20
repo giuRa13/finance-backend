@@ -18,5 +18,33 @@ namespace finance_backend.Models
         public Stock? Stock { get; set; } // NAVIGATION PROPERTY
         // let to navigate the other side of relationship 
         // (es.: Stock.CompanyName, Stock.Marketcap)
+
+
+        // ONE TO ONE (migration and update db)
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }
+
+/* now only one user can be associated with an object
+    we put the user as a SUB-MODEL inside the Comment model
+        
+    ONE TO MANY:
+        {
+            "comment": "this is a comment",
+            "user": [  
+                {"user":"user"},
+                {"user":"user"},
+                {"user":"user"},
+            ]
+        }
+        
+     ONE TO ONE:
+        {
+            "comment": "this is a comment",
+            "user": {
+                "user":"user"
+            }
+        }
+        
+*/

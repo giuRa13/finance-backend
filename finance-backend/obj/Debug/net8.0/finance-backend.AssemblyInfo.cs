@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("finance-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+854f422f2f000cafdbc278e6708ec04844db7158")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e6f14fe65622b3cc778426a1684cea0b5ce600b")]
 [assembly: System.Reflection.AssemblyProductAttribute("finance-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("finance-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -34,7 +34,7 @@ namespace finance_backend.Controllers
                 return BadRequest(ModelState);
 
             var stocks = await _stockRepository.GetAllAsync(query); 
-            var stocksDTO = stocks.Select(s => s.ToStockDTO());
+            var stocksDTO = stocks.Select(s => s.ToStockDTO()).ToList();
 
             return Ok(stocksDTO);
         }

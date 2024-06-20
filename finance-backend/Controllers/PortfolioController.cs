@@ -56,7 +56,7 @@ namespace finance_backend.Controllers
 
             if(userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower())) return BadRequest("Stock already in the portfolio!");
 
-            var porfolioModel = new Portfolio
+            var porfolioModel = new Portfolio   
             {
                 StockId = stock.Id,
                 AppUserId = appUser.Id,
