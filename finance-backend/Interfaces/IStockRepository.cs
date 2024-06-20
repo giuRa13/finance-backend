@@ -12,14 +12,16 @@ namespace finance_backend.Interfaces
     {
         Task<List<Stock>> GetAllAsync(QueryObject query);
 
-        Task <Stock?> GetByIdAsync(int id);
+        Task<Stock?> GetByIdAsync(int id);
 
-        Task <Stock> CreateAsync(Stock stockModel);
+        Task<Stock?> GetBySymbolAsync(string symbol);
 
-        Task <Stock?> UpdateAsync(int id, UpdateStockRequestDTO stockDTO);
+        Task<Stock> CreateAsync(Stock stockModel);
 
-        Task <Stock> DeleteAsync(int id);
+        Task<Stock?> UpdateAsync(int id, UpdateStockRequestDTO stockDTO);
 
-        Task <bool> StockExists(int id); // for Create Comment
+        Task<Stock> DeleteAsync(int id);
+
+        Task<bool> StockExists(int id); // for Create Comment
     }
 }
