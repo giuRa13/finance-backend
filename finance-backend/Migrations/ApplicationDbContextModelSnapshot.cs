@@ -51,13 +51,13 @@ namespace finance_backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cd2fc0b0-6c8f-42a1-a40f-26f7a52e1a94",
+                            Id = "f41c9ca8-ff8a-4b78-ae9c-44afd109f2e9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0bf4872c-0f0d-4af7-98d3-60da3b0c473b",
+                            Id = "930b956c-68b0-4104-910b-fd1f1b8be797",
                             Name = "User",
                             NormalizedName = "USER"
                         });

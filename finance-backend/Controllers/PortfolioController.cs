@@ -18,15 +18,18 @@ namespace finance_backend.Controllers
         private readonly IStockRepository _stockRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IPortfolioRepository _portfolioRepository;
+        private readonly IFMPService _fmpService;
         
         public PortfolioController(
             UserManager<AppUser> userManager, 
             IStockRepository stockRepository,
-            IPortfolioRepository portfolioRepository)
+            IPortfolioRepository portfolioRepository,
+            IFMPService fMPService)
         {
             _stockRepository = stockRepository;
             _userManager = userManager; 
             _portfolioRepository = portfolioRepository;
+            _fmpService = fMPService;
         }
 
 
@@ -49,25 +52,37 @@ namespace finance_backend.Controllers
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
             var stock = await _stockRepository.GetBySymbolAsync(symbol);
+            
+            if (stock == null)
+            {
+                stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                if(stock == null)
+                {
+                    return BadRequest("Stock not found!");
+                }
+                else{
+                    await _stockRepository.CreateAsync(stock);
+                }
+            }
 
             if(stock == null) return BadRequest("Stock not found!");
 
             var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
 
-            if(userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower())) return BadRequest("Stock already in the portfolio!");
+            if(userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower())) 
+                return BadRequest("Stock already in the portfolio!");
 
-            var porfolioModel = new Portfolio   
+            var portfolioModel = new Portfolio   
             {
                 StockId = stock.Id,
-                AppUserId = appUser.Id,
-                
+                AppUserId = appUser.Id,              
             };
 
-            await _portfolioRepository.CreateAsync(porfolioModel);
+            await _portfolioRepository.CreateAsync(portfolioModel);
 
-            if(porfolioModel == null)
+            if(portfolioModel == null)
             { 
-                return StatusCode(500, "Coul not create");
+                return StatusCode(500, "Could not create");
             }
             else 
             {

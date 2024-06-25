@@ -28,7 +28,7 @@ namespace finance_backend.Controllers
 
         [HttpGet]
         //[Authorize]
-        public async Task<IActionResult> GetAll([FromQuery]QueryObject query)
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid) // for validation (annotation)
                 return BadRequest(ModelState);
@@ -64,11 +64,7 @@ namespace finance_backend.Controllers
             var stockModel = stockDTO.ToStockFromCreateDTO();
             await _stockRepository.CreateAsync(stockModel);
 
-            return CreatedAtAction(
-                nameof(GetById), 
-                new{Id = stockModel.Id}, 
-                stockModel.ToStockDTO() //(201)
-            );
+            return CreatedAtAction(nameof(GetById), new{Id = stockModel.Id}, stockModel.ToStockDTO()); // 201
         }
 
 

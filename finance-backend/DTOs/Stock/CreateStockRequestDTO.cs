@@ -9,11 +9,11 @@ namespace finance_backend.DTOs.Stock
     public class CreateStockRequestDTO
     {
         [Required]
-        [MaxLength(20, ErrorMessage = "Symbol cannot be over 10 characters")]
+        [MaxLength(10, ErrorMessage = "Symbol cannot be over 10 characters")]
         public string Symbol { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(20, ErrorMessage = "Company Name cannot be over 10 characters")]
+        [MaxLength(20, ErrorMessage = "Company Name cannot be over 20 characters")]
         public string CompanyName { get; set; } = string.Empty ;
 
         [Required]

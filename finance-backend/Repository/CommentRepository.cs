@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using finance_backend.Data;
+using finance_backend.Helpers;
 using finance_backend.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,21 @@ namespace finance_backend.Repository
         }
 
 
-        public async Task<List<Comment>> GetAllAsync()
+        public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
         {
-            return await _context.Comments.Include(a => a.AppUser).ToListAsync();
+            var comments = _context.Comments.Include(a => a.AppUser).AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            {
+                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
+            };
+
+            if(queryObject.IsDescending == true)
+            {
+                comments = comments.OrderByDescending(c => c.CreatedOn);
+            }
+
+            return await comments.ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
@@ -38,7 +51,7 @@ namespace finance_backend.Repository
         }
 
 
-        public async Task<Comment> DeleteAsync(int id)
+        public async Task<Comment?> DeleteAsync(int id)
         {
             var commentModel = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
 

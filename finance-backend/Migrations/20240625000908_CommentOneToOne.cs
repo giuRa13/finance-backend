@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace finance_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class PortfolioManyToMany : Migration
+    public partial class CommentOneToOne : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -185,11 +185,18 @@ namespace finance_backend.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StockId = table.Column<int>(type: "int", nullable: true)
+                    StockId = table.Column<int>(type: "int", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Stocks_StockId",
                         column: x => x.StockId,
@@ -226,8 +233,8 @@ namespace finance_backend.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "741012a3-5a27-4c2e-9b23-21e81e6b8986", null, "Admin", "ADMIN" },
-                    { "a2a95b7e-baf0-4bd9-9165-945f12d4b40f", null, "User", "USER" }
+                    { "930b956c-68b0-4104-910b-fd1f1b8be797", null, "User", "USER" },
+                    { "f41c9ca8-ff8a-4b78-ae9c-44afd109f2e9", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -268,6 +275,11 @@ namespace finance_backend.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_AppUserId",
+                table: "Comments",
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_StockId",

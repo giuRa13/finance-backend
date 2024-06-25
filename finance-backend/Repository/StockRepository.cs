@@ -40,9 +40,7 @@ namespace finance_backend.Repository
             {
                 if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
                 {
-                    stocks = query.IsDescending ? 
-                        stocks.OrderByDescending(s => s.Symbol)
-                        : stocks.OrderBy(s => s.Symbol);
+                    stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
                 }
             }
 
@@ -64,7 +62,7 @@ namespace finance_backend.Repository
         }
         
 
-        public async Task<Stock?> CreateAsync(Stock stockModel)
+        public async Task<Stock> CreateAsync(Stock stockModel)
         {
             await _context.Stocks.AddAsync(stockModel);
             await _context.SaveChangesAsync();

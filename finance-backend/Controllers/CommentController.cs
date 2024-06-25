@@ -10,6 +10,8 @@ using finance_backend.Repository;
 using finance_backend.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using finance_backend.Helpers;
 
 namespace finance_backend.Controllers
 {
@@ -20,22 +22,28 @@ namespace finance_backend.Controllers
         private readonly ICommentRepository _commentRepository;
         private readonly IStockRepository _stockRepository;
         private readonly UserManager<AppUser> _userManager;
-        public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository, UserManager<AppUser> userManager)
+        private readonly IFMPService _fmpService;
+        public CommentController(ICommentRepository commentRepository, 
+        IStockRepository stockRepository, 
+        UserManager<AppUser> userManager,
+        IFMPService fMPService)
         {
             _commentRepository = commentRepository;
             _stockRepository = stockRepository;
             _userManager = userManager;
+            _fmpService = fMPService;
         }
 
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery]CommentQueryObject queryObject)
         {
             if (!ModelState.IsValid) // for validation (annotation)
                 return BadRequest(ModelState);
 
-            var comments = await _commentRepository.GetAllAsync();
+            var comments = await _commentRepository.GetAllAsync(queryObject);
             var commentDTO = comments.Select(s => s.ToCommentDTO());
 
             return Ok(commentDTO);
@@ -57,21 +65,32 @@ namespace finance_backend.Controllers
         }
 
 
-        [HttpPost("{stockId:int}")]
-        public async Task<IActionResult> Create([FromRoute]int stockId, CreateCommentRequestDTO commentDTO)
+        [HttpPost]
+        [Route("{symbol:alpha}")]
+        public async Task<IActionResult> Create([FromRoute]string symbol, CreateCommentRequestDTO commentDTO)
         {
             if (!ModelState.IsValid) // for validation (annotation)
                 return BadRequest(ModelState);
 
-            if (!await _stockRepository.StockExists(stockId))
+            var stock = await _stockRepository.GetBySymbolAsync(symbol);
+
+            if (stock == null)
             {
-                return BadRequest("Stock does not exists!");
+                stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                if(stock == null)
+                {
+                    return BadRequest("Stock not found!");
+                }
+                else
+                {
+                    await _stockRepository.CreateAsync(stock);
+                }
             }
 
             var username = User.GetUsername();  
             var appUser = await _userManager.FindByNameAsync(username);  
 
-            var commentModel = commentDTO.ToCommentFromCreate(stockId);
+            var commentModel = commentDTO.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId = appUser.Id;    
             await _commentRepository.CreateAsync(commentModel);
             return CreatedAtAction(
