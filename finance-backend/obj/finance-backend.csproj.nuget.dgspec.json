@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\finance-backend.csproj": {}
+    "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\finance-backend.csproj": {}
   },
   "projects": {
-    "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\finance-backend.csproj": {
+    "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\finance-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\finance-backend.csproj",
+        "projectUniqueName": "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\finance-backend.csproj",
         "projectName": "finance-backend",
-        "projectPath": "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\finance-backend.csproj",
+        "projectPath": "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\finance-backend.csproj",
         "packagesPath": "C:\\Users\\giuli\\.nuget\\packages\\",
-        "outputPath": "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\obj\\",
+        "outputPath": "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
