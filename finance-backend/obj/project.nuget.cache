@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ENCiZDTZL38=",
+  "dgSpecHash": "cArPTNYBRSA=",
   "success": true,
-  "projectFilePath": "C:\\projects\\FinancePortfolio\\FinancePortfolioBackend\\finance-backend\\finance-backend.csproj",
+  "projectFilePath": "C:\\projects\\FinancePortfolio\\FinanceportfolioBackend\\finance-backend\\finance-backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\giuli\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\giuli\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
